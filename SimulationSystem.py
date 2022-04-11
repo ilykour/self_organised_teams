@@ -23,20 +23,20 @@ algorithm_by_name = {
 # matplotlib parameters of all algorithms - to keep graphs consistent.
 plt_parameters = {
     "color": {
-        "sot_1": "orange",
-        "sot_2": "black",
+        "c_sot": "orange",
+        "r_sort": "black",
         "hive": "blue",
         "hybrid_hive": "crimson"
     },
     "marker": {
-        "sot_1": "v",
-        "sot_2": "o",
+        "c_sot": "v",
+        "r_sort": "o",
         "hive": "s",
         "hybrid_hive": "*"
     },
     "linestyle": {
-        "sot_1": "v",
-        "sot_2": "dashed",
+        "c_sot": "v",
+        "r_sort": "dashed",
         "hive": "dashdot",
         "hybrid_hive": "dotted"
     }
@@ -182,8 +182,8 @@ def run_system_one_restart(system_parameters: Dict, algorithm_names: Set):
     # Make a DEEP copy of first hackathon to ensure the systems accept identical hackathon.
     hackathon_hive = Hackathon(_id=0, x=system_parameters["x"], risk=system_parameters["risk"])
     hackathon_hybrid_hive = copy.deepcopy(hackathon_hive)
-    hackathon_sot_1 = copy.deepcopy(hackathon_hive)
-    hackathon_sot_2 = copy.deepcopy(hackathon_hive)
+    hackathon_c_sot = copy.deepcopy(hackathon_hive)
+    hackathon_r_sort = copy.deepcopy(hackathon_hive)
 
     # algorithm name-SimulationSystem pair
     # {"hive": SimulationSystem}
@@ -213,24 +213,24 @@ def run_system_one_restart(system_parameters: Dict, algorithm_names: Set):
         results["hybrid_hive"] = hybrid_hive
 
     sot_algo_param_1 = {"homophily_threshold": system_parameters["homophily_threshold"], "team_priority": False}
-    sot_1 = SimulationSystem(_round=system_parameters["_round"],
-                             _hackathon=hackathon_sot_1,
+    c_sot = SimulationSystem(_round=system_parameters["_round"],
+                             _hackathon=hackathon_c_sot,
                              algorithm_name="sot",
                              param_dict=sot_algo_param_1,
                              info_to_console=system_parameters["info_to_console"])
-    if "sot_1" in algorithm_names:
-        sot_1.run()
-        results["sot_1"] = sot_1
+    if "c_sot" in algorithm_names:
+        c_sot.run()
+        results["c_sot"] = c_sot
 
     sot_algo_param_2 = {"homophily_threshold": system_parameters["homophily_threshold"], "team_priority": True}
-    sot_2 = SimulationSystem(_round=system_parameters["_round"],
-                             _hackathon=hackathon_sot_2,
+    r_sort = SimulationSystem(_round=system_parameters["_round"],
+                             _hackathon=hackathon_r_sort,
                              algorithm_name="sot",
                              param_dict=sot_algo_param_2,
                              info_to_console=system_parameters["info_to_console"])
-    if "sot_2" in algorithm_names:
-        sot_2.run()
-        results["sot_2"] = sot_2
+    if "r_sort" in algorithm_names:
+        r_sort.run()
+        results["r_sort"] = r_sort
 
     return results
 
@@ -326,12 +326,12 @@ def load_results_with_different_risk_level(result_type: str, algorithm_names: Se
         results_by_risk = pickle.load(f)
     for risk in risk_levels:
         # Get the results and average them by the round number.
-        results_by_risk[risk] = [np.mean(results_by_risk[risk]["sot_1"][result_type]) / system_parameters["_round"],
-                                 np.mean(results_by_risk[risk]["sot_2"][result_type]) / system_parameters["_round"],
+        results_by_risk[risk] = [np.mean(results_by_risk[risk]["c_sot"][result_type]) / system_parameters["_round"],
+                                 np.mean(results_by_risk[risk]["r_sort"][result_type]) / system_parameters["_round"],
                                  np.mean(results_by_risk[risk]["hive"][result_type]) / system_parameters["_round"]]
 
-    sot_1_results = [result[0] for result in results_by_risk.values()]
-    sot_2_results = [result[1] for result in results_by_risk.values()]
+    c_sot_results = [result[0] for result in results_by_risk.values()]
+    r_sort_results = [result[1] for result in results_by_risk.values()]
     hive_results = [result[2] for result in results_by_risk.values()]
 
     x = []
@@ -340,11 +340,11 @@ def load_results_with_different_risk_level(result_type: str, algorithm_names: Se
             x.append(key + 4)
         else:
             x.append(key)
-    plt.plot(x, sot_1_results, label="SOT variation 1",
-             color=plt_parameters["color"]["sot_1"], marker=plt_parameters["marker"]["sot_1"])
-    plt.plot(x, sot_2_results, label="SOT variation 2",
-             color=plt_parameters["color"]["sot_2"], marker=plt_parameters["marker"]["sot_2"],
-             linestyle=plt_parameters["linestyle"]["sot_2"])
+    plt.plot(x, c_sot_results, label="C-SOT",
+             color=plt_parameters["color"]["c_sot"], marker=plt_parameters["marker"]["c_sot"])
+    plt.plot(x, r_sort_results, label="R-SOT",
+             color=plt_parameters["color"]["r_sort"], marker=plt_parameters["marker"]["r_sort"],
+             linestyle=plt_parameters["linestyle"]["r_sort"])
     plt.plot(x, hive_results, label="Hive", color=plt_parameters["color"]["hive"],
              marker=plt_parameters["marker"]["hive"], linestyle=plt_parameters["linestyle"]["hive"])
     plt.xlabel(r"Risk level ($\beta$)")
@@ -376,19 +376,19 @@ def load_results_with_different_homophily(result_type: str, algorithm_names: Set
         results_by_homophily = pickle.load(f)
     for homophily in homophily_thresholds:
         results_by_homophily[homophily] = [
-            np.mean(results_by_homophily[homophily]["sot_1"][result_type]) / system_parameters["_round"],
-            np.mean(results_by_homophily[homophily]["sot_2"][result_type]) / system_parameters["_round"],
+            np.mean(results_by_homophily[homophily]["c_sot"][result_type]) / system_parameters["_round"],
+            np.mean(results_by_homophily[homophily]["r_sort"][result_type]) / system_parameters["_round"],
             np.mean(results_by_homophily[homophily]["hive"][result_type]) / system_parameters["_round"]]
 
-    sot_1_results = [result[0] for result in results_by_homophily.values()]
-    sot_2_results = [result[1] for result in results_by_homophily.values()]
+    c_sot_results = [result[0] for result in results_by_homophily.values()]
+    r_sort_results = [result[1] for result in results_by_homophily.values()]
     hive_results = [result[2] for result in results_by_homophily.values()]
 
-    plt.plot(results_by_homophily.keys(), sot_1_results, label="SOT variation 1",
-             color=plt_parameters["color"]["sot_1"], marker=plt_parameters["marker"]["sot_1"])
-    plt.plot(results_by_homophily.keys(), sot_2_results, label="SOT variation 2",
-             color=plt_parameters["color"]["sot_2"], marker=plt_parameters["marker"]["sot_2"],
-             linestyle=plt_parameters["linestyle"]["sot_2"])
+    plt.plot(results_by_homophily.keys(), c_sot_results, label="C-SOT",
+             color=plt_parameters["color"]["c_sot"], marker=plt_parameters["marker"]["c_sot"])
+    plt.plot(results_by_homophily.keys(), r_sort_results, label="R-SOT",
+             color=plt_parameters["color"]["r_sort"], marker=plt_parameters["marker"]["r_sort"],
+             linestyle=plt_parameters["linestyle"]["r_sort"])
     plt.plot(results_by_homophily.keys(), hive_results, label="Hive", color=plt_parameters["color"]["hive"],
              marker=plt_parameters["marker"]["hive"], linestyle=plt_parameters["linestyle"]["hive"])
     plt.xlabel("Homophily threshold")
@@ -416,16 +416,16 @@ def load_results_with_different_population(result_type: str, algorithm_names: Se
         results_by_size = pickle.load(f)
     for population in population_sizes:
         results_by_size[population] = [
-            np.mean(results_by_size[population]["sot_1"][result_type]) / system_parameters["_round"],
-            np.mean(results_by_size[population]["sot_2"][result_type]) / system_parameters["_round"]]
-    sot_1_results = [result[0] for result in results_by_size.values()]
-    sot_2_results = [result[1] for result in results_by_size.values()]
+            np.mean(results_by_size[population]["c_sot"][result_type]) / system_parameters["_round"],
+            np.mean(results_by_size[population]["r_sort"][result_type]) / system_parameters["_round"]]
+    c_sot_results = [result[0] for result in results_by_size.values()]
+    r_sort_results = [result[1] for result in results_by_size.values()]
 
-    plt.plot(population_sizes, sot_1_results, label="SOT variation 1",
-             color=plt_parameters["color"]["sot_1"], marker=plt_parameters["marker"]["sot_1"])
-    plt.plot(population_sizes, sot_2_results, label="SOT variation 2",
-             color=plt_parameters["color"]["sot_2"], marker=plt_parameters["marker"]["sot_2"],
-             linestyle=plt_parameters["linestyle"]["sot_2"])
+    plt.plot(population_sizes, c_sot_results, label="C-SOT",
+             color=plt_parameters["color"]["c_sot"], marker=plt_parameters["marker"]["c_sot"])
+    plt.plot(population_sizes, r_sort_results, label="R-SOT",
+             color=plt_parameters["color"]["r_sort"], marker=plt_parameters["marker"]["r_sort"],
+             linestyle=plt_parameters["linestyle"]["r_sort"])
     plt.xlabel("Population size")
     plt.ylabel(result_type + " quality")
     plt.grid(linestyle="--")
@@ -448,8 +448,8 @@ def load_results_rq_2(algorithm_names: Set):
     boxplot_data = {"Best": {}, "Average": {}, "Worst": {}}
     for key in boxplot_data.keys():
         boxplot_data[key]["Hive"] = [val / system_parameters["_round"] for val in all_results["hive"][key]]
-        boxplot_data[key]["SOT variation 1"] = [val / system_parameters["_round"] for val in all_results["sot_1"][key]]
-        boxplot_data[key]["SOT variation 2"] = [val / system_parameters["_round"] for val in all_results["sot_2"][key]]
+        boxplot_data[key]["C-SOT"] = [val / system_parameters["_round"] for val in all_results["c_sot"][key]]
+        boxplot_data[key]["R-SOT"] = [val / system_parameters["_round"] for val in all_results["r_sort"][key]]
         boxplot_data[key]["HiveHybrid"] = [val / system_parameters["_round"] for val in all_results["hybrid_hive"][key]]
     for key, val in boxplot_data.items():
         draw_graph_rq_2(boxplot_data[key], key)
@@ -487,8 +487,8 @@ if __name__ == "__main__":
     }
     restart = 30
     runtime_per_restart = 6
-    with_hive = {"sot_1", "sot_2", "hive"}
-    without_hive = {"sot_1", "sot_2"}
+    with_hive = {"c_sot", "r_sort", "hive"}
+    without_hive = {"c_sot", "r_sort"}
 
     # Parameter settings for matplotlib
     cmfont = font_manager.FontProperties(fname=matplotlib.get_data_path() + '/fonts/ttf/cmr10.ttf')
@@ -521,5 +521,5 @@ if __name__ == "__main__":
     load_results_with_different_homophily(result_type="Worst", algorithm_names=with_hive)
 
     # Run RQ2 - comprehensive comparison
-    run_rq_2(system_parameters, restart, runtime_per_restart, {"sot_1", "sot_2", "hive", "hybrid_hive"})
-    load_results_rq_2({"sot_1", "sot_2", "hive", "hybrid_hive"})
+    run_rq_2(system_parameters, restart, runtime_per_restart, {"c_sot", "r_sort", "hive", "hybrid_hive"})
+    load_results_rq_2({"c_sot", "r_sort", "hive", "hybrid_hive"})
