@@ -476,7 +476,7 @@ def draw_graph_rq_2(boxplot_data: Dict, result_type: str):
 if __name__ == "__main__":
     system_parameters = {
         "x": 20,
-        "_round": 10,
+        "_round": 2,
         "k": 8.0,
         "lam": 0.8,
         "alpha": 0.5,
@@ -502,24 +502,24 @@ if __name__ == "__main__":
     # Beta distribution graph
     get_beta_distribution_graph()
 
-    # Run RQ1.1 - risk level
-    run_with_different_risk_level(system_parameters, restart, runtime_per_restart, algorithm_names=with_hive)
-    load_results_with_different_risk_level(result_type="Best", algorithm_names=with_hive)
-    load_results_with_different_risk_level(result_type="Average", algorithm_names=with_hive)
-    load_results_with_different_risk_level(result_type="Worst", algorithm_names=with_hive)
+    # Run RQ2.1 - risk level
+    run_with_different_risk_level(system_parameters, restart, runtime_per_restart, algorithm_names=without_hive)
+    load_results_with_different_risk_level(result_type="Best", algorithm_names=without_hive)
+    load_results_with_different_risk_level(result_type="Average", algorithm_names=without_hive)
+    load_results_with_different_risk_level(result_type="Worst", algorithm_names=without_hive)
 
-    # Run RQ1.2 - population size
+    # Run RQ2.2 - population size
     run_with_different_population(system_parameters, restart, runtime_per_restart, algorithm_names=without_hive)
     load_results_with_different_population(result_type="Best", algorithm_names=without_hive)
     load_results_with_different_population(result_type="Average", algorithm_names=without_hive)
     load_results_with_different_population(result_type="Worst", algorithm_names=without_hive)
 
-    # Run RQ1.2 - homophily threshold
-    run_with_different_homophily(system_parameters, restart, runtime_per_restart, algorithm_names=with_hive)
-    load_results_with_different_homophily(result_type="Best", algorithm_names=with_hive)
-    load_results_with_different_homophily(result_type="Average", algorithm_names=with_hive)
-    load_results_with_different_homophily(result_type="Worst", algorithm_names=with_hive)
+    # Run RQ2.2 - homophily threshold
+    run_with_different_homophily(system_parameters, restart, runtime_per_restart, algorithm_names=without_hive)
+    load_results_with_different_homophily(result_type="Best", algorithm_names=without_hive)
+    load_results_with_different_homophily(result_type="Average", algorithm_names=without_hive)
+    load_results_with_different_homophily(result_type="Worst", algorithm_names=without_hive)
 
-    # Run RQ2 - comprehensive comparison
+    # Run RQ1 - comprehensive comparison
     run_rq_2(system_parameters, restart, runtime_per_restart, {"c_sot", "r_sort", "hive", "hybrid_hive"})
     load_results_rq_2({"c_sot", "r_sort", "hive", "hybrid_hive"})
