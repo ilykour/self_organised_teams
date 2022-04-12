@@ -480,8 +480,8 @@ if __name__ == "__main__":
         "risk": 2,
         "info_to_console": True
     }
-    restart = 1
-    runtime_per_restart = 1
+    restart = 6 # number of rounds to average
+    runtime_per_restart = 30 # number of restarts
     with_hive = {"c_sot", "r_sort", "hive"}
     without_hive = {"c_sot", "r_sort"}
 
