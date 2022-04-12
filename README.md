@@ -96,7 +96,7 @@ Simulation system to run different team formation algorithm under different scen
 1. Algorithm: contains the Classes for the Models (algorithms):
     
     ```
-    class HIVEAlgorithm(Algorithm):
+    class **HIVEAlgorithm**(Algorithm):
     Hive network rotation algorithm.
     Class attributes:
         k: k value used in the logistic function.
@@ -177,7 +177,7 @@ Simulation system to run different team formation algorithm under different scen
          risk_appetite
          diversity_preference
          expertise
-       ```
+      ```
 
 ### Simulation Parameters
         ```
