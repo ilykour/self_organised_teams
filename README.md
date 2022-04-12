@@ -107,8 +107,6 @@ system_parameters = {
     }
     restart = 3
     runtime_per_restart = 6
-    with_hive = {"sot_1", "sot_2", "hive"}
-    without_hive = {"sot_1", "sot_2"}
 ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
