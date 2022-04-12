@@ -316,23 +316,22 @@ def run_with_different_risk_level(system_parameters: Dict, restart: int, time_pe
         all_results = run_system(system_parameters, restart, time_per_restart, algorithm_names, ANOVA_test=False)
         results_by_risk[risk] = all_results
     # Save results in the disk.
-    with open("./results/Quality results of different risk levels.pkl", "wb") as f:
+    with open("Quality results of different risk levels.pkl", "wb") as f:
         pickle.dump(results_by_risk, f, pickle.HIGHEST_PROTOCOL)
         print("Risky level data saved. ")
 
 
 def load_results_with_different_risk_level(result_type: str, algorithm_names: Set):
-    with open("./results/Quality results of different risk levels.pkl", "rb") as f:
+    with open("Quality results of different risk levels.pkl", "rb") as f:
         results_by_risk = pickle.load(f)
     for risk in risk_levels:
         # Get the results and average them by the round number.
         results_by_risk[risk] = [np.mean(results_by_risk[risk]["c_sot"][result_type]) / system_parameters["_round"],
-                                 np.mean(results_by_risk[risk]["r_sort"][result_type]) / system_parameters["_round"],
-                                 np.mean(results_by_risk[risk]["hive"][result_type]) / system_parameters["_round"]]
+                                 np.mean(results_by_risk[risk]["r_sort"][result_type]) / system_parameters["_round"]]
 
     c_sot_results = [result[0] for result in results_by_risk.values()]
     r_sort_results = [result[1] for result in results_by_risk.values()]
-    hive_results = [result[2] for result in results_by_risk.values()]
+   
 
     x = []
     for key in list(results_by_risk.keys()):
@@ -345,8 +344,7 @@ def load_results_with_different_risk_level(result_type: str, algorithm_names: Se
     plt.plot(x, r_sort_results, label="R-SOT",
              color=plt_parameters["color"]["r_sort"], marker=plt_parameters["marker"]["r_sort"],
              linestyle=plt_parameters["linestyle"]["r_sort"])
-    plt.plot(x, hive_results, label="Hive", color=plt_parameters["color"]["hive"],
-             marker=plt_parameters["marker"]["hive"], linestyle=plt_parameters["linestyle"]["hive"])
+
     plt.xlabel(r"Risk level ($\beta$)")
     plt.ylabel(result_type + " quality")
     _ = plt.xticks(np.arange(-1, 5.1, 0.5),
@@ -366,31 +364,28 @@ def run_with_different_homophily(system_parameters: Dict, restart: int, time_per
         print("Current homophily threshold: " + str(homophily))
         all_results = run_system(system_parameters, restart, time_per_restart, algorithm_names, ANOVA_test=False)
         results_by_homophily[homophily] = all_results
-    with open("./results/Quality results of different homophily thresholds.pkl", "wb") as f:
+    with open("Quality results of different homophily thresholds.pkl", "wb") as f:
         pickle.dump(results_by_homophily, f, pickle.HIGHEST_PROTOCOL)
 
 
 def load_results_with_different_homophily(result_type: str, algorithm_names: Set):
-    with open("./results/Quality results of different homophily thresholds.pkl",
+    with open("Quality results of different homophily thresholds.pkl",
               "rb") as f:
         results_by_homophily = pickle.load(f)
     for homophily in homophily_thresholds:
         results_by_homophily[homophily] = [
             np.mean(results_by_homophily[homophily]["c_sot"][result_type]) / system_parameters["_round"],
-            np.mean(results_by_homophily[homophily]["r_sort"][result_type]) / system_parameters["_round"],
-            np.mean(results_by_homophily[homophily]["hive"][result_type]) / system_parameters["_round"]]
+            np.mean(results_by_homophily[homophily]["r_sort"][result_type]) / system_parameters["_round"]]
 
     c_sot_results = [result[0] for result in results_by_homophily.values()]
     r_sort_results = [result[1] for result in results_by_homophily.values()]
-    hive_results = [result[2] for result in results_by_homophily.values()]
+
 
     plt.plot(results_by_homophily.keys(), c_sot_results, label="C-SOT",
              color=plt_parameters["color"]["c_sot"], marker=plt_parameters["marker"]["c_sot"])
     plt.plot(results_by_homophily.keys(), r_sort_results, label="R-SOT",
              color=plt_parameters["color"]["r_sort"], marker=plt_parameters["marker"]["r_sort"],
              linestyle=plt_parameters["linestyle"]["r_sort"])
-    plt.plot(results_by_homophily.keys(), hive_results, label="Hive", color=plt_parameters["color"]["hive"],
-             marker=plt_parameters["marker"]["hive"], linestyle=plt_parameters["linestyle"]["hive"])
     plt.xlabel("Homophily threshold")
     plt.ylabel(result_type + " quality")
     plt.grid(linestyle="--")
@@ -407,12 +402,12 @@ def run_with_different_population(system_parameters: Dict, restart: int, time_pe
         print("Current population size: " + str(population))
         all_results = run_system(system_parameters, restart, time_per_restart, algorithm_names, ANOVA_test=False)
         results_by_size[population] = all_results
-    with open("./results/Quality results of different population sizes.pkl", "wb") as f:
+    with open("Quality results of different population sizes.pkl", "wb") as f:
         pickle.dump(results_by_size, f, pickle.HIGHEST_PROTOCOL)
 
 
 def load_results_with_different_population(result_type: str, algorithm_names: Set):
-    with open("./results/Quality results of different population sizes.pkl", "rb") as f:
+    with open("Quality results of different population sizes.pkl", "rb") as f:
         results_by_size = pickle.load(f)
     for population in population_sizes:
         results_by_size[population] = [
@@ -437,13 +432,13 @@ def load_results_with_different_population(result_type: str, algorithm_names: Se
 def run_rq_2(system_parameters: Dict, restart: int, time_per_restart: int, algorithm_names: Set):
     all_results = run_system(system_parameters, restart, time_per_restart, algorithm_names, ANOVA_test=False)
     print(all_results)
-    with open("./results/RQ2_results.pkl", "wb") as f:
+    with open("RQ1_results.pkl", "wb") as f:
         pickle.dump(all_results, f, pickle.HIGHEST_PROTOCOL)
-        print("RQ2 data saved. ")
+        print("RQ1 data saved. ")
 
 
 def load_results_rq_2(algorithm_names: Set):
-    with open("./results/RQ2_results.pkl", "rb") as f:
+    with open("RQ1_results.pkl", "rb") as f:
         all_results = pickle.load(f)
     boxplot_data = {"Best": {}, "Average": {}, "Worst": {}}
     for key in boxplot_data.keys():
@@ -485,8 +480,8 @@ if __name__ == "__main__":
         "risk": 2,
         "info_to_console": True
     }
-    restart = 30
-    runtime_per_restart = 6
+    restart = 1
+    runtime_per_restart = 1
     with_hive = {"c_sot", "r_sort", "hive"}
     without_hive = {"c_sot", "r_sort"}
 
@@ -502,19 +497,19 @@ if __name__ == "__main__":
     # Beta distribution graph
     get_beta_distribution_graph()
 
-    # Run RQ2.1 - risk level
+    # Run RQ1.1 - risk level
     run_with_different_risk_level(system_parameters, restart, runtime_per_restart, algorithm_names=without_hive)
     load_results_with_different_risk_level(result_type="Best", algorithm_names=without_hive)
     load_results_with_different_risk_level(result_type="Average", algorithm_names=without_hive)
     load_results_with_different_risk_level(result_type="Worst", algorithm_names=without_hive)
 
-    # Run RQ2.2 - population size
+    # Run RQ1.2 - population size
     run_with_different_population(system_parameters, restart, runtime_per_restart, algorithm_names=without_hive)
     load_results_with_different_population(result_type="Best", algorithm_names=without_hive)
     load_results_with_different_population(result_type="Average", algorithm_names=without_hive)
     load_results_with_different_population(result_type="Worst", algorithm_names=without_hive)
 
-    # Run RQ2.2 - homophily threshold
+    # Run RQ1.2 - homophily threshold
     run_with_different_homophily(system_parameters, restart, runtime_per_restart, algorithm_names=without_hive)
     load_results_with_different_homophily(result_type="Best", algorithm_names=without_hive)
     load_results_with_different_homophily(result_type="Average", algorithm_names=without_hive)
