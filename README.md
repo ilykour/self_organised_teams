@@ -54,13 +54,7 @@ Our study highlights the importance of integrating worker agency in algorithm-me
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
 ### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* python > 3.7.0
   ```sh
   Mac:https://www.python.org/downloads/macos/
   Windows: https://www.python.org/downloads/windows/
@@ -68,8 +62,6 @@ This is an example of how to list things you need to use the software and how to
   ```
 
 ### Installation
-
-_Below is an example of how you can install and set up the simulator on your local machine. This program doesn't rely on any external dependencies or services._
 
 1. Clone the repo
    ```sh
@@ -93,11 +85,8 @@ _Below is an example of how you can install and set up the simulator on your loc
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Parameters
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -114,7 +103,6 @@ _For more examples, please refer to the [Documentation](https://example.com)_
     - [ ] Chinese
     - [ ] Spanish
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
