@@ -9,6 +9,7 @@ class Team:
     Class attributes:
         team_members: A list of workers in this team.
     """
+
     team_members: List[Worker]
 
     # In Developer's domain, Worker 1 with expertise 0.9, Worker 2 with expertise 0.9
@@ -50,7 +51,7 @@ class Team:
                 return self.team_members.pop(_i)
 
     def get_outcome(self) -> float:
-        """Get the outcome of this team. """
+        """Get the outcome of this team."""
         outcome = 0.0
         # Add up all outcomes time their weights.
         # Check the last part of this class.
@@ -59,7 +60,7 @@ class Team:
         return outcome
 
     def get_skill_outcome(self) -> float:
-        """Check the workers' domain and corresponding expertise, then calculate the skill outcome. """
+        """Check the workers' domain and corresponding expertise, then calculate the skill outcome."""
         skills = {}
         for worker in self.team_members:
             domain = worker.attributes.knowledge_domain
@@ -112,7 +113,9 @@ class Team:
         # Example
         # ["D": 1, "I": 2, "C": 2]
         # Unique personality size: 3
-        team_personalities = Counter([worker.attributes.personality for worker in self.team_members])
+        team_personalities = Counter(
+            [worker.attributes.personality for worker in self.team_members]
+        )
         # 0.4 (= 0.2 * (3 - 1))
         compatibility_outcome += 0.2 * (len(list(team_personalities.keys())) - 1)
         # 0.8 (= 0.4 + 0.4)
@@ -143,5 +146,5 @@ class Team:
     outcome_weights = {
         get_skill_outcome: 0.5,
         get_compatibility_outcome: 0.3,
-        get_team_size_outcome: 0.2
+        get_team_size_outcome: 0.2,
     }

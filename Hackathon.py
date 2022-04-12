@@ -10,6 +10,7 @@ class Hackathon:
     id: (DEPRECATED) Id of this hackathon.
     time: (DEPRECATED) Time that this hackathon takes.
     """
+
     id: int
     worker_number: int
     time: float

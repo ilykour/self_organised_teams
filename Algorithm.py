@@ -37,6 +37,7 @@ class HIVEAlgorithm(Algorithm):
         epsilon: Probability used to stop stochastic search for network rotation.
         graph: Tie strength between every two nodes. weight = graph[id_1][id_2].
     """
+
     k: float
     lam: float
     alpha: float
@@ -49,7 +50,7 @@ class HIVEAlgorithm(Algorithm):
         self.network_graph = {}
 
     def set_param(self, param_dict) -> None:
-        """Set all parameters used in Hive algorithm. """
+        """Set all parameters used in Hive algorithm."""
         self.k = param_dict["k"]
         self.lam = param_dict["lam"]
         self.alpha = param_dict["alpha"]
@@ -94,17 +95,24 @@ class HIVEAlgorithm(Algorithm):
             A set of teams.
         """
         # Get the number of teams that we want to form. Desired team size: minimal team size + 1.
-        num_of_teams = math.ceil(simulation.hackathon.worker_number / (Team.min_team_size + 1))
+        num_of_teams = math.ceil(
+            simulation.hackathon.worker_number / (Team.min_team_size + 1)
+        )
 
         # Get all dominant person.
-        team_leader = [_id for _id in simulation.hackathon.workers.keys() if
-                       simulation.hackathon.workers[_id].attributes.personality == "Dominant"]
+        team_leader = [
+            _id
+            for _id in simulation.hackathon.workers.keys()
+            if simulation.hackathon.workers[_id].attributes.personality == "Dominant"
+        ]
         # Sample a subset if there are too many dominant person.
         if num_of_teams < len(team_leader):
             team_leader = random.sample(team_leader, num_of_teams)
 
         # Get all workers that are not team leader.
-        free_ids = [_id for _id in simulation.hackathon.workers.keys() if _id not in team_leader]
+        free_ids = [
+            _id for _id in simulation.hackathon.workers.keys() if _id not in team_leader
+        ]
 
         for _id in team_leader:
             # For each team: add team leader and record team leader's id.
@@ -120,7 +128,9 @@ class HIVEAlgorithm(Algorithm):
                 for _ in range(Team.min_team_size):
                     # Add the number of minimal team size of workers into this team.
                     if free_ids:
-                        team.add_team_member(simulation.hackathon.workers[free_ids.pop()])
+                        team.add_team_member(
+                            simulation.hackathon.workers[free_ids.pop()]
+                        )
                     else:
                         break
             # In the end, add this new team into the simulation.
@@ -173,7 +183,9 @@ class HIVEAlgorithm(Algorithm):
         solution = {}
         while True:
             try:
-                candidate, _id, target = self.add_valid_move(solution, simulation, bad_moves)
+                candidate, _id, target = self.add_valid_move(
+                    solution, simulation, bad_moves
+                )
             except TypeError:
                 # If we couldn't find any valid move, return current solution.
                 # print("Search space empty, returning solution. ")
@@ -187,8 +199,12 @@ class HIVEAlgorithm(Algorithm):
             current_teams = self.transform(solution, simulation)
             new_teams = self.transform(candidate, simulation)
             # Calculate objective function value.
-            old_f = self.get_f(current_teams, self.add_path_to_network(solution, self.network_graph))
-            new_f = self.get_f(new_teams, self.add_path_to_network(candidate, self.network_graph))
+            old_f = self.get_f(
+                current_teams, self.add_path_to_network(solution, self.network_graph)
+            )
+            new_f = self.get_f(
+                new_teams, self.add_path_to_network(candidate, self.network_graph)
+            )
             """
             print(solution)
             print(candidate)
@@ -213,7 +229,9 @@ class HIVEAlgorithm(Algorithm):
                 print("Returning solution cause epsilon reached. ")
                 return solution
 
-    def add_valid_move(self, solution: Dict, simulation, bad_moves: Dict) -> Tuple[Dict, int, int]:
+    def add_valid_move(
+        self, solution: Dict, simulation, bad_moves: Dict
+    ) -> Tuple[Dict, int, int]:
         """Search for a valid move.
 
         Args:
@@ -248,11 +266,18 @@ class HIVEAlgorithm(Algorithm):
                         # Must be within team size range
                         # Must not be a bad move that we already found
                         # If it is in the solution, then new team must be different from current solution
-                        if leader_id not in current_teams[i] and \
-                                len(current_teams[i]) > Team.min_team_size and \
-                                len(target_team) < Team.max_team_size and \
-                                (_id not in bad_moves.keys() or leader_id not in bad_moves[_id]) and \
-                                (_id not in solution.keys() or leader_id != solution[_id]):
+                        if (
+                            leader_id not in current_teams[i]
+                            and len(current_teams[i]) > Team.min_team_size
+                            and len(target_team) < Team.max_team_size
+                            and (
+                                _id not in bad_moves.keys()
+                                or leader_id not in bad_moves[_id]
+                            )
+                            and (
+                                _id not in solution.keys() or leader_id != solution[_id]
+                            )
+                        ):
                             candidate = copy.deepcopy(solution)
                             candidate[_id] = leader_id
                             return candidate, _id, leader_id
@@ -324,11 +349,15 @@ class HIVEAlgorithm(Algorithm):
                         worker.record_teammate(simulation.current_round, _id)
                         self.network_graph[worker.id].add(_id)
                         # Logistic function to increase tie strength
-                        self.graph[worker.id][_id] = self.sigmoid(self.graph[worker.id][_id])
+                        self.graph[worker.id][_id] = self.sigmoid(
+                            self.graph[worker.id][_id]
+                        )
                 for _id in self.graph[worker.id].keys():
                     if _id not in ids:
                         # Dampening factor to decrease tie strength
-                        self.graph[worker.id][_id] = self.lam * self.graph[worker.id][_id]
+                        self.graph[worker.id][_id] = (
+                            self.lam * self.graph[worker.id][_id]
+                        )
 
     def sigmoid(self, x) -> float:
         """Sigmoid (logistic) function used to increase tie strength between workers.
@@ -339,7 +368,7 @@ class HIVEAlgorithm(Algorithm):
         Returns:
             New tie strength after applied sigmoid function.
         """
-        return 1 / (1 + math.exp(- self.k * (x - 0.2)))
+        return 1 / (1 + math.exp(-self.k * (x - 0.2)))
 
     def get_network_efficiency(self, graph) -> float:
         """Get the network efficiency of this graph.
@@ -422,7 +451,9 @@ class HIVEAlgorithm(Algorithm):
             tie_strength += self.get_team_tie_strength(team)
         # print("NE: " + str(self.get_network_efficiency(graph)))
         # print("TS: " + str(tie_strength))
-        return (1 - self.alpha) * self.get_network_efficiency(graph) + self.alpha * tie_strength * 0.005
+        return (1 - self.alpha) * self.get_network_efficiency(
+            graph
+        ) + self.alpha * tie_strength * 0.005
 
 
 class SOTAlgorithm(Algorithm):
@@ -432,6 +463,7 @@ class SOTAlgorithm(Algorithm):
         homophily_threshold: The threshold to determine if a worker want to join a team or form a team with others.
         variation: Benchmark variation number. 1 for teams choose first, and 2 for workers choose first.
     """
+
     homophily_threshold: float
     variation: bool
 
@@ -439,7 +471,7 @@ class SOTAlgorithm(Algorithm):
         pass
 
     def set_param(self, param_dict) -> None:
-        """Set all parameters used in Hive algorithm. """
+        """Set all parameters used in Hive algorithm."""
         self.homophily_threshold = param_dict["homophily_threshold"]
         self.variation = param_dict["team_priority"]
 
@@ -505,8 +537,11 @@ class SOTAlgorithm(Algorithm):
                 break
             else:
                 # Add the first three workers with largest similarity among all possible combinations.
-                new_team.add_team_member(free_workers.pop(worker_graph[0][1]), free_workers.pop(worker_graph[0][2]),
-                                         free_workers.pop(worker_graph[0][3]))
+                new_team.add_team_member(
+                    free_workers.pop(worker_graph[0][1]),
+                    free_workers.pop(worker_graph[0][2]),
+                    free_workers.pop(worker_graph[0][3]),
+                )
                 while free_workers:
                     # Try to find all other workers that can join this new team.
                     if not self.find_new_worker(free_workers, new_team):
@@ -558,11 +593,16 @@ class SOTAlgorithm(Algorithm):
                     for _id in free_workers.copy().keys():
                         simulation.free_workers[_id] = free_workers.pop(_id)
                 else:
-                    new_team.add_team_member(free_workers.pop(worker_graph[0][1]), free_workers.pop(worker_graph[0][2]),
-                                             free_workers.pop(worker_graph[0][3]))
+                    new_team.add_team_member(
+                        free_workers.pop(worker_graph[0][1]),
+                        free_workers.pop(worker_graph[0][2]),
+                        free_workers.pop(worker_graph[0][3]),
+                    )
                     simulation.add_new_team(new_team)
                     for _id in new_team.get_worker_ids():
-                        worker_graph = self.remove_edges(worker_graph=worker_graph, _id=_id)
+                        worker_graph = self.remove_edges(
+                            worker_graph=worker_graph, _id=_id
+                        )
 
         return simulation.teams
 
@@ -576,7 +616,11 @@ class SOTAlgorithm(Algorithm):
         Returns:
             A new graph with certain edges removed.
         """
-        return [edge for edge in worker_graph if edge[1] != _id and edge[2] != _id and edge[3] != _id]
+        return [
+            edge
+            for edge in worker_graph
+            if edge[1] != _id and edge[2] != _id and edge[3] != _id
+        ]
 
     def find_new_worker(self, free_workers: Dict, team: Team) -> bool:
         """Find a free worker with highest similarity for current team.
@@ -603,9 +647,11 @@ class SOTAlgorithm(Algorithm):
             return False
         else:
             # Get the worker with highest similarity and highest reward
-            new_worker = sorted(similarity_dict[max_similarity],
-                                key=lambda worker: worker.average_reward,
-                                reverse=True)[0]
+            new_worker = sorted(
+                similarity_dict[max_similarity],
+                key=lambda worker: worker.average_reward,
+                reverse=True,
+            )[0]
             team.add_team_member(free_workers.pop(new_worker.id))
             return True
 
@@ -623,8 +669,11 @@ class SOTAlgorithm(Algorithm):
 
         for team in simulation.teams.copy():
             # Get all workers that want to leave
-            left_index = [i for i in range(len(team.team_members)) if
-                          not team.team_members[i].should_stay(simulation.current_round - 1)]
+            left_index = [
+                i
+                for i in range(len(team.team_members))
+                if not team.team_members[i].should_stay(simulation.current_round - 1)
+            ]
             # If only one worker wants to stay -> team dissolves as well
             if len(left_index) == len(team.team_members) - 1:
                 left_index = [i for i in range(len(team.team_members))]
@@ -648,11 +697,13 @@ class SOTAlgorithm(Algorithm):
         Returns:
             A list of tuple of: Similarity, id1, id2, id3.
         """
-        return [(worker_1.get_avg_similarity(worker_2, worker_3), id_1, id_2, id_3)
-                for id_1, worker_1 in workers.items()
-                for id_2, worker_2 in workers.items()
-                for id_3, worker_3 in workers.items()
-                if id_1 != id_2 and id_1 != id_3 and id_2 != id_3]
+        return [
+            (worker_1.get_avg_similarity(worker_2, worker_3), id_1, id_2, id_3)
+            for id_1, worker_1 in workers.items()
+            for id_2, worker_2 in workers.items()
+            for id_3, worker_3 in workers.items()
+            if id_1 != id_2 and id_1 != id_3 and id_2 != id_3
+        ]
 
     def get_outcomes(self, simulation) -> List[Tuple]:
         """Get outcome for each team and sort them in descending order.
@@ -684,7 +735,9 @@ class SOTAlgorithm(Algorithm):
             else:
                 reward = (float(length) - 1 - i) / (float(length) - 1)
             for worker in all_outcome[i][1].team_members:
-                simulation.hackathon.workers[worker.id].append_reward(simulation.current_round, reward)
+                simulation.hackathon.workers[worker.id].append_reward(
+                    simulation.current_round, reward
+                )
 
         for team in simulation.teams:
             ids = team.get_worker_ids()
@@ -693,10 +746,7 @@ class SOTAlgorithm(Algorithm):
                     if _id != worker.id:
                         worker.record_teammate(simulation.current_round, _id)
 
-    variation_function = {
-        True: get_team_variation_1,
-        False: get_team_variation_2
-    }
+    variation_function = {True: get_team_variation_1, False: get_team_variation_2}
 
 
 class HybridHive(Algorithm):
@@ -709,6 +759,7 @@ class HybridHive(Algorithm):
         epsilon: Probability used to stop stochastic search for network rotation.
         graph: Tie strength betweent every two nodes. weight = graph[id_1][id_2].
     """
+
     k: float
     lam: float
     alpha: float
@@ -722,7 +773,7 @@ class HybridHive(Algorithm):
         self.network_graph = {}
 
     def set_param(self, param_dict) -> None:
-        """Set all parameters used in Hive algorithm. """
+        """Set all parameters used in Hive algorithm."""
         self.k = param_dict["k"]
         self.lam = param_dict["lam"]
         self.alpha = param_dict["alpha"]
@@ -768,17 +819,24 @@ class HybridHive(Algorithm):
             A set of teams.
         """
         # Get the number of teams that we want to form. Desired team size: minimal team size + 1.
-        num_of_teams = math.ceil(simulation.hackathon.worker_number / (Team.min_team_size + 1))
+        num_of_teams = math.ceil(
+            simulation.hackathon.worker_number / (Team.min_team_size + 1)
+        )
 
         # Get all dominant person.
-        team_leader = [_id for _id in simulation.hackathon.workers.keys() if
-                       simulation.hackathon.workers[_id].attributes.personality == "Dominant"]
+        team_leader = [
+            _id
+            for _id in simulation.hackathon.workers.keys()
+            if simulation.hackathon.workers[_id].attributes.personality == "Dominant"
+        ]
         # Sample a subset if there are too many dominant person.
         if num_of_teams < len(team_leader):
             team_leader = random.sample(team_leader, num_of_teams)
 
         # Get all workers that are not team leader.
-        free_ids = [_id for _id in simulation.hackathon.workers.keys() if _id not in team_leader]
+        free_ids = [
+            _id for _id in simulation.hackathon.workers.keys() if _id not in team_leader
+        ]
 
         for _id in team_leader:
             # For each team: add team leader and record team leader's id.
@@ -794,7 +852,9 @@ class HybridHive(Algorithm):
                 for _ in range(Team.min_team_size):
                     # Add the number of minimal team size of workers into this team.
                     if free_ids:
-                        team.add_team_member(simulation.hackathon.workers[free_ids.pop()])
+                        team.add_team_member(
+                            simulation.hackathon.workers[free_ids.pop()]
+                        )
                     else:
                         break
             # In the end, add this new team into the simulation.
@@ -847,7 +907,9 @@ class HybridHive(Algorithm):
         solution = {}
         while True:
             try:
-                candidate, _id, target = self.add_valid_move(solution, simulation, bad_moves)
+                candidate, _id, target = self.add_valid_move(
+                    solution, simulation, bad_moves
+                )
             except TypeError:
                 # If we couldn't find any valid move, return current solution.
                 # print("Search space empty, returning solution. ")
@@ -861,8 +923,12 @@ class HybridHive(Algorithm):
             current_teams = self.transform(solution, simulation)
             new_teams = self.transform(candidate, simulation)
             # Calculate objective function value.
-            old_f = self.get_f(current_teams, self.add_path_to_network(solution, self.network_graph))
-            new_f = self.get_f(new_teams, self.add_path_to_network(candidate, self.network_graph))
+            old_f = self.get_f(
+                current_teams, self.add_path_to_network(solution, self.network_graph)
+            )
+            new_f = self.get_f(
+                new_teams, self.add_path_to_network(candidate, self.network_graph)
+            )
             """
             print(solution)
             print(candidate)
@@ -887,7 +953,9 @@ class HybridHive(Algorithm):
                 print("Returning solution cause epsilon reached. ")
                 return solution
 
-    def add_valid_move(self, solution: Dict, simulation, bad_moves: Dict) -> Tuple[Dict, int, int]:
+    def add_valid_move(
+        self, solution: Dict, simulation, bad_moves: Dict
+    ) -> Tuple[Dict, int, int]:
         """Search for a valid move.
 
         Args:
@@ -925,13 +993,23 @@ class HybridHive(Algorithm):
                         # Must be within team size range
                         # Must not be a bad move that we already found
                         # If it is in the solution, then new team must be different from current solution
-                        if leader_id not in current_teams[i] and \
-                                len(current_teams[i]) > Team.min_team_size and \
-                                len(target_team) < Team.max_team_size and \
-                                (_id not in bad_moves.keys() or leader_id not in bad_moves[_id]) and \
-                                (_id not in solution.keys() or leader_id != solution[_id]) and \
-                                not simulation.hackathon.workers[_id].should_stay() and \
-                                next_team.get_new_worker_similarity(simulation.hackathon.workers[_id]) > self.homophily_threshold:
+                        if (
+                            leader_id not in current_teams[i]
+                            and len(current_teams[i]) > Team.min_team_size
+                            and len(target_team) < Team.max_team_size
+                            and (
+                                _id not in bad_moves.keys()
+                                or leader_id not in bad_moves[_id]
+                            )
+                            and (
+                                _id not in solution.keys() or leader_id != solution[_id]
+                            )
+                            and not simulation.hackathon.workers[_id].should_stay()
+                            and next_team.get_new_worker_similarity(
+                                simulation.hackathon.workers[_id]
+                            )
+                            > self.homophily_threshold
+                        ):
                             candidate = copy.deepcopy(solution)
                             candidate[_id] = leader_id
                             return candidate, _id, leader_id
@@ -1003,11 +1081,15 @@ class HybridHive(Algorithm):
                         worker.record_teammate(simulation.current_round, _id)
                         self.network_graph[worker.id].add(_id)
                         # Logistic function to increase tie strength
-                        self.graph[worker.id][_id] = self.sigmoid(self.graph[worker.id][_id])
+                        self.graph[worker.id][_id] = self.sigmoid(
+                            self.graph[worker.id][_id]
+                        )
                 for _id in self.graph[worker.id].keys():
                     if _id not in ids:
                         # Dampening factor to decrease tie strength
-                        self.graph[worker.id][_id] = self.lam * self.graph[worker.id][_id]
+                        self.graph[worker.id][_id] = (
+                            self.lam * self.graph[worker.id][_id]
+                        )
 
     def sigmoid(self, x) -> float:
         """Sigmoid (logistic) function used to increase tie strength between workers.
@@ -1018,7 +1100,7 @@ class HybridHive(Algorithm):
         Returns:
             New tie strength after applied sigmoid function.
         """
-        return 1 / (1 + math.exp(- self.k * (x - 0.2)))
+        return 1 / (1 + math.exp(-self.k * (x - 0.2)))
 
     def get_network_efficiency(self, graph) -> float:
         """Get the network efficiency of this graph.
@@ -1101,4 +1183,6 @@ class HybridHive(Algorithm):
             tie_strength += self.get_team_tie_strength(team)
         # print("NE: " + str(self.get_network_efficiency(graph)))
         # print("TS: " + str(tie_strength))
-        return (1 - self.alpha) * self.get_network_efficiency(graph) + self.alpha * tie_strength * 0.005
+        return (1 - self.alpha) * self.get_network_efficiency(
+            graph
+        ) + self.alpha * tie_strength * 0.005

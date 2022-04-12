@@ -8,20 +8,12 @@ knowledge_domains = {
     1: "Software developer",
     2: "Designer",
     3: "Marketer",
-    4: "Sound engineer"
+    4: "Sound engineer",
 }
 
-nationalities = {
-    1: "USA",
-    2: "India",
-    3: "Other"
-}
+nationalities = {1: "USA", 2: "India", 3: "Other"}
 
-educational_levels = {
-    1: "High school",
-    2: "Bachelor",
-    3: "Master or above"
-}
+educational_levels = {1: "High school", 2: "Bachelor", 3: "Master or above"}
 
 ages = {
     1: "0 - 20",
@@ -29,17 +21,12 @@ ages = {
     3: "31 - 40",
     4: "41 - 50",
     5: "51 - 60",
-    6: "Above 61"
+    6: "Above 61",
 }
 # AMT data
 age_prob = [0.0152, 0.4091, 0.3636, 0.0758, 0.0909, 0.0454]
 
-personalities = {
-    1: "Dominant",
-    2: "Inspiring",
-    3: "Supportive",
-    4: "Cautious"
-}
+personalities = {1: "Dominant", 2: "Inspiring", 3: "Supportive", 4: "Cautious"}
 # Data from paper "Personality Matters: Balancing for Personality Types Leads to Better Outcomes for Crowd Teams"
 personality_prob = [0.5, 0.1, 0.2, 0.2]
 
@@ -52,6 +39,7 @@ class Attribute:
     """
     All attributes in an worker
     """
+
     knowledge_domain: str
     nationality: str
     education: str
@@ -69,7 +57,9 @@ class Attribute:
         self.nationality = choice(list(nationalities.values()))
         self.education = choice(list(educational_levels.values()))
         self.age = choices(list(ages.values()), weights=age_prob, k=1)[0]
-        self.personality = choices(list(personalities.values()), weights=personality_prob, k=1)[0]
+        self.personality = choices(
+            list(personalities.values()), weights=personality_prob, k=1
+        )[0]
 
         # These (numerical) attributes are generated based on beta distribution.
         # If risk > 0, then return the normal beta distribution value.
@@ -100,6 +90,7 @@ class Worker:
 
     collaboration_history: a dict containing the history of all the workers it has worked with by their id
     """
+
     id: int
     attributes: Attribute
     preference_dict: Dict[str, List[Any]]  # DEPRECATED

@@ -17,7 +17,7 @@ from Team import Team
 algorithm_by_name = {
     "sot": SOTAlgorithm,
     "hive": HIVEAlgorithm,
-    "hybrid_hive": HybridHive
+    "hybrid_hive": HybridHive,
 }
 
 # matplotlib parameters of all algorithms - to keep graphs consistent.
@@ -26,20 +26,15 @@ plt_parameters = {
         "c_sot": "orange",
         "r_sort": "black",
         "hive": "blue",
-        "hybrid_hive": "crimson"
+        "hybrid_hive": "crimson",
     },
-    "marker": {
-        "c_sot": "v",
-        "r_sort": "o",
-        "hive": "s",
-        "hybrid_hive": "*"
-    },
+    "marker": {"c_sot": "v", "r_sort": "o", "hive": "s", "hybrid_hive": "*"},
     "linestyle": {
         "c_sot": "v",
         "r_sort": "dashed",
         "hive": "dashdot",
-        "hybrid_hive": "dotted"
-    }
+        "hybrid_hive": "dotted",
+    },
 }
 
 """
@@ -57,8 +52,13 @@ Population sizes:
 [20, 30,..., 100]
 From small population size to large population size. 
 """
-risk_levels = [float("{:.1f}".format(x)) for x in list(np.arange(5.0, 1.9, -0.3)) + list(np.arange(-2.3, -5, -0.3))]
-homophily_thresholds = [float("{:.1f}".format(x)) for x in list(np.arange(1.0, 4.1, 0.3))]
+risk_levels = [
+    float("{:.1f}".format(x))
+    for x in list(np.arange(5.0, 1.9, -0.3)) + list(np.arange(-2.3, -5, -0.3))
+]
+homophily_thresholds = [
+    float("{:.1f}".format(x)) for x in list(np.arange(1.0, 4.1, 0.3))
+]
 population_sizes = [20, 30, 40, 50, 60, 70, 80, 90, 100]
 
 
@@ -76,6 +76,7 @@ class SimulationSystem:
          worst_quality_historyL The worst quality of each team in each round.
          algorithm: The algorithm used to form team.
     """
+
     round: int
     current_round: int
     hackathon: Hackathon
@@ -87,12 +88,14 @@ class SimulationSystem:
     algorithm: Algorithm
     info_to_console: bool
 
-    def __init__(self,
-                 _round: int,
-                 _hackathon: Hackathon,
-                 algorithm_name: str,
-                 param_dict: Dict[str, Any],
-                 info_to_console: bool) -> None:
+    def __init__(
+        self,
+        _round: int,
+        _hackathon: Hackathon,
+        algorithm_name: str,
+        param_dict: Dict[str, Any],
+        info_to_console: bool,
+    ) -> None:
         """Default constructor.
 
         Args:
@@ -114,12 +117,12 @@ class SimulationSystem:
         self.info_to_console = info_to_console
 
     def run(self) -> None:
-        """Run the system for *round times. """
+        """Run the system for *round times."""
         for _ in range(self.round):
             self.run_one_round()
 
     def run_one_round(self) -> None:
-        """Run the system for one round. """
+        """Run the system for one round."""
         self.current_round += 1
 
         # Get new teams in this round.
@@ -130,8 +133,12 @@ class SimulationSystem:
 
         # Record quality from the best team.
         self.quality_history[self.current_round] = all_outcomes[0][0]
-        self.avg_quality_history[self.current_round] = sum([outcome[0] for outcome in all_outcomes]) / len(all_outcomes)
-        self.worst_quality_history[self.current_round] = all_outcomes[len(all_outcomes) - 1][0]
+        self.avg_quality_history[self.current_round] = sum(
+            [outcome[0] for outcome in all_outcomes]
+        ) / len(all_outcomes)
+        self.worst_quality_history[self.current_round] = all_outcomes[
+            len(all_outcomes) - 1
+        ][0]
 
         # Record outcome history and teammate history for each worker in each team.
         self.algorithm.record_results(self, all_outcomes)
@@ -155,7 +162,10 @@ class SimulationSystem:
         Returns:
             A 2-D list containing all ids, sorted by the smallest id value in each team.
         """
-        return sorted([sorted(ids) for ids in [team.get_worker_ids() for team in self.teams]], key=lambda ids: ids[0])
+        return sorted(
+            [sorted(ids) for ids in [team.get_worker_ids() for team in self.teams]],
+            key=lambda ids: ids[0],
+        )
 
     def print_info(self, all_outcomes: List[Tuple]) -> None:
         """Print all useful info in this round to console.
@@ -166,10 +176,16 @@ class SimulationSystem:
         print("Current round: " + str(self.current_round))
         print("Teams in this round: " + str(self.get_team_ids()))
         print("Free workers in this round: " + str(list(self.free_workers.keys())))
-        print("Best quality: " + str(self.quality_history[self.current_round]) + " from team: " + str(
-            all_outcomes[0][1].get_worker_ids()))
+        print(
+            "Best quality: "
+            + str(self.quality_history[self.current_round])
+            + " from team: "
+            + str(all_outcomes[0][1].get_worker_ids())
+        )
         print("Total quality: " + str(sum(list(self.quality_history.values()))))
-        print("AVG quality: " + str(self.avg_quality_history[self.current_round]) + "\n")
+        print(
+            "AVG quality: " + str(self.avg_quality_history[self.current_round]) + "\n"
+        )
 
 
 def run_system_one_restart(system_parameters: Dict, algorithm_names: Set):
@@ -180,7 +196,9 @@ def run_system_one_restart(system_parameters: Dict, algorithm_names: Set):
         algorithm_names: The names of algorithms that need to run.
     """
     # Make a DEEP copy of first hackathon to ensure the systems accept identical hackathon.
-    hackathon_hive = Hackathon(_id=0, x=system_parameters["x"], risk=system_parameters["risk"])
+    hackathon_hive = Hackathon(
+        _id=0, x=system_parameters["x"], risk=system_parameters["risk"]
+    )
     hackathon_hybrid_hive = copy.deepcopy(hackathon_hive)
     hackathon_c_sot = copy.deepcopy(hackathon_hive)
     hackathon_r_sort = copy.deepcopy(hackathon_hive)
@@ -189,45 +207,67 @@ def run_system_one_restart(system_parameters: Dict, algorithm_names: Set):
     # {"hive": SimulationSystem}
     results = {}
 
-    hive_algo_param = {"k": system_parameters["k"], "lam": system_parameters["lam"],
-                       "alpha": system_parameters["alpha"], "epsilon": system_parameters["epsilon"]}
-    hive = SimulationSystem(_round=system_parameters["_round"],
-                            _hackathon=hackathon_hive,
-                            algorithm_name="hive",
-                            param_dict=hive_algo_param,
-                            info_to_console=system_parameters["info_to_console"])
+    hive_algo_param = {
+        "k": system_parameters["k"],
+        "lam": system_parameters["lam"],
+        "alpha": system_parameters["alpha"],
+        "epsilon": system_parameters["epsilon"],
+    }
+    hive = SimulationSystem(
+        _round=system_parameters["_round"],
+        _hackathon=hackathon_hive,
+        algorithm_name="hive",
+        param_dict=hive_algo_param,
+        info_to_console=system_parameters["info_to_console"],
+    )
     if "hive" in algorithm_names:
         hive.run()
         results["hive"] = hive
 
-    hybrid_hive_algo_param = {"k": system_parameters["k"], "lam": system_parameters["lam"],
-                              "alpha": system_parameters["alpha"], "epsilon": system_parameters["epsilon"],
-                              "homophily_threshold": system_parameters["homophily_threshold"]}
-    hybrid_hive = SimulationSystem(_round=system_parameters["_round"],
-                                   _hackathon=hackathon_hybrid_hive,
-                                   algorithm_name="hybrid_hive",
-                                   param_dict=hybrid_hive_algo_param,
-                                   info_to_console=system_parameters["info_to_console"])
+    hybrid_hive_algo_param = {
+        "k": system_parameters["k"],
+        "lam": system_parameters["lam"],
+        "alpha": system_parameters["alpha"],
+        "epsilon": system_parameters["epsilon"],
+        "homophily_threshold": system_parameters["homophily_threshold"],
+    }
+    hybrid_hive = SimulationSystem(
+        _round=system_parameters["_round"],
+        _hackathon=hackathon_hybrid_hive,
+        algorithm_name="hybrid_hive",
+        param_dict=hybrid_hive_algo_param,
+        info_to_console=system_parameters["info_to_console"],
+    )
     if "hybrid_hive" in algorithm_names:
         hybrid_hive.run()
         results["hybrid_hive"] = hybrid_hive
 
-    sot_algo_param_1 = {"homophily_threshold": system_parameters["homophily_threshold"], "team_priority": False}
-    c_sot = SimulationSystem(_round=system_parameters["_round"],
-                             _hackathon=hackathon_c_sot,
-                             algorithm_name="sot",
-                             param_dict=sot_algo_param_1,
-                             info_to_console=system_parameters["info_to_console"])
+    sot_algo_param_1 = {
+        "homophily_threshold": system_parameters["homophily_threshold"],
+        "team_priority": False,
+    }
+    c_sot = SimulationSystem(
+        _round=system_parameters["_round"],
+        _hackathon=hackathon_c_sot,
+        algorithm_name="sot",
+        param_dict=sot_algo_param_1,
+        info_to_console=system_parameters["info_to_console"],
+    )
     if "c_sot" in algorithm_names:
         c_sot.run()
         results["c_sot"] = c_sot
 
-    sot_algo_param_2 = {"homophily_threshold": system_parameters["homophily_threshold"], "team_priority": True}
-    r_sort = SimulationSystem(_round=system_parameters["_round"],
-                             _hackathon=hackathon_r_sort,
-                             algorithm_name="sot",
-                             param_dict=sot_algo_param_2,
-                             info_to_console=system_parameters["info_to_console"])
+    sot_algo_param_2 = {
+        "homophily_threshold": system_parameters["homophily_threshold"],
+        "team_priority": True,
+    }
+    r_sort = SimulationSystem(
+        _round=system_parameters["_round"],
+        _hackathon=hackathon_r_sort,
+        algorithm_name="sot",
+        param_dict=sot_algo_param_2,
+        info_to_console=system_parameters["info_to_console"],
+    )
     if "r_sort" in algorithm_names:
         r_sort.run()
         results["r_sort"] = r_sort
@@ -235,7 +275,13 @@ def run_system_one_restart(system_parameters: Dict, algorithm_names: Set):
     return results
 
 
-def run_system(system_parameters: Dict, restart: int, time_per_restart: int, algorithm_names: Set, ANOVA_test: bool):
+def run_system(
+    system_parameters: Dict,
+    restart: int,
+    time_per_restart: int,
+    algorithm_names: Set,
+    ANOVA_test: bool,
+):
     """Run the simulation system.
 
     Args:
@@ -252,20 +298,38 @@ def run_system(system_parameters: Dict, restart: int, time_per_restart: int, alg
     for _ in range(restart * time_per_restart):
         results = run_system_one_restart(system_parameters, algorithm_names)
         for name in algorithm_names:
-            all_results[name]["Best"].append(sum(list(results[name].quality_history.values())))
-            all_results[name]["Average"].append(sum(list(results[name].avg_quality_history.values())))
-            all_results[name]["Worst"].append(sum(list(results[name].worst_quality_history.values())))
+            all_results[name]["Best"].append(
+                sum(list(results[name].quality_history.values()))
+            )
+            all_results[name]["Average"].append(
+                sum(list(results[name].avg_quality_history.values()))
+            )
+            all_results[name]["Worst"].append(
+                sum(list(results[name].worst_quality_history.values()))
+            )
 
     for name in algorithm_names:
         # Take the average of every time_per_restart restarts
         # Before: "Best": [2, 3, 2, 1, 2, ..., 3] 15 values, time_per_restart = 3
         # After: "Best": [2.33, 1.66, ..., ] 5 values
         all_results[name]["Best"] = list(
-            np.mean(np.array(all_results[name]["Best"]).reshape(-1, time_per_restart), axis=1))
+            np.mean(
+                np.array(all_results[name]["Best"]).reshape(-1, time_per_restart),
+                axis=1,
+            )
+        )
         all_results[name]["Average"] = list(
-            np.mean(np.array(all_results[name]["Average"]).reshape(-1, time_per_restart), axis=1))
+            np.mean(
+                np.array(all_results[name]["Average"]).reshape(-1, time_per_restart),
+                axis=1,
+            )
+        )
         all_results[name]["Worst"] = list(
-            np.mean(np.array(all_results[name]["Worst"]).reshape(-1, time_per_restart), axis=1))
+            np.mean(
+                np.array(all_results[name]["Worst"]).reshape(-1, time_per_restart),
+                axis=1,
+            )
+        )
     print("All results: ")
     for k, v in all_results.items():
         print(k + " with mean of " + str(np.mean(v["Best"])))
@@ -273,8 +337,11 @@ def run_system(system_parameters: Dict, restart: int, time_per_restart: int, alg
 
     if ANOVA_test:
         names = list(algorithm_names)
-        f, p = stats.f_oneway(all_results[names[0]]["Best"], all_results[names[1]]["Best"],
-                              all_results[names[2]]["Best"])
+        f, p = stats.f_oneway(
+            all_results[names[0]]["Best"],
+            all_results[names[1]]["Best"],
+            all_results[names[2]]["Best"],
+        )
         print("ANOVA test results: ")
         print("F-value: " + str(f))
         print("P-value: " + str(p))
@@ -282,14 +349,14 @@ def run_system(system_parameters: Dict, restart: int, time_per_restart: int, alg
     return all_results
 
 
-def get_cmap(n, name='hsv'):
+def get_cmap(n, name="hsv"):
     """Returns a function that maps each index in 0, 1, ..., n-1 to a distinct
     RGB color; the keyword argument name must be a standard mpl colormap name."""
     return plt.cm.get_cmap(name, n)
 
 
 def get_beta_distribution_graph():
-    """Draw the beta distribution graph with different risk levels. """
+    """Draw the beta distribution graph with different risk levels."""
     x = np.arange(0.0, 1.001, 0.01)
     color_map = get_cmap(len(risk_levels))
     for i, b in enumerate(risk_levels):
@@ -301,11 +368,13 @@ def get_beta_distribution_graph():
     plt.xlabel("Random variable")
     plt.ylabel("Probability")
     plt.grid(linestyle="--")
-    plt.legend(bbox_to_anchor=(1, 1), loc='upper left', prop={'size': 17})
+    plt.legend(bbox_to_anchor=(1, 1), loc="upper left", prop={"size": 17})
     plt.show()
 
 
-def run_with_different_risk_level(system_parameters: Dict, restart: int, time_per_restart: int, algorithm_names: Set):
+def run_with_different_risk_level(
+    system_parameters: Dict, restart: int, time_per_restart: int, algorithm_names: Set
+):
     print("Risky levels: ")
     print(risk_levels)
     results_by_risk = {}
@@ -313,7 +382,13 @@ def run_with_different_risk_level(system_parameters: Dict, restart: int, time_pe
     for risk in risk_levels:
         system_parameters["risk"] = risk
         print("Current risk level: " + str(risk))
-        all_results = run_system(system_parameters, restart, time_per_restart, algorithm_names, ANOVA_test=False)
+        all_results = run_system(
+            system_parameters,
+            restart,
+            time_per_restart,
+            algorithm_names,
+            ANOVA_test=False,
+        )
         results_by_risk[risk] = all_results
     # Save results in the disk.
     with open("Quality results of different risk levels.pkl", "wb") as f:
@@ -326,12 +401,15 @@ def load_results_with_different_risk_level(result_type: str, algorithm_names: Se
         results_by_risk = pickle.load(f)
     for risk in risk_levels:
         # Get the results and average them by the round number.
-        results_by_risk[risk] = [np.mean(results_by_risk[risk]["c_sot"][result_type]) / system_parameters["_round"],
-                                 np.mean(results_by_risk[risk]["r_sort"][result_type]) / system_parameters["_round"]]
+        results_by_risk[risk] = [
+            np.mean(results_by_risk[risk]["c_sot"][result_type])
+            / system_parameters["_round"],
+            np.mean(results_by_risk[risk]["r_sort"][result_type])
+            / system_parameters["_round"],
+        ]
 
     c_sot_results = [result[0] for result in results_by_risk.values()]
     r_sort_results = [result[1] for result in results_by_risk.values()]
-   
 
     x = []
     for key in list(results_by_risk.keys()):
@@ -339,53 +417,89 @@ def load_results_with_different_risk_level(result_type: str, algorithm_names: Se
             x.append(key + 4)
         else:
             x.append(key)
-    plt.plot(x, c_sot_results, label="C-SOT",
-             color=plt_parameters["color"]["c_sot"], marker=plt_parameters["marker"]["c_sot"])
-    plt.plot(x, r_sort_results, label="R-SOT",
-             color=plt_parameters["color"]["r_sort"], marker=plt_parameters["marker"]["r_sort"],
-             linestyle=plt_parameters["linestyle"]["r_sort"])
+    plt.plot(
+        x,
+        c_sot_results,
+        label="C-SOT",
+        color=plt_parameters["color"]["c_sot"],
+        marker=plt_parameters["marker"]["c_sot"],
+    )
+    plt.plot(
+        x,
+        r_sort_results,
+        label="R-SOT",
+        color=plt_parameters["color"]["r_sort"],
+        marker=plt_parameters["marker"]["r_sort"],
+        linestyle=plt_parameters["linestyle"]["r_sort"],
+    )
 
     plt.xlabel(r"Risk level ($\beta$)")
     plt.ylabel(result_type + " quality")
-    _ = plt.xticks(np.arange(-1, 5.1, 0.5),
-                   reversed([float("{:.1f}".format(x)) for x in
-                             list(np.arange(5.0, 1.9, -0.5)) + list(np.arange(-2.5, -5.1, -0.5))]))
+    _ = plt.xticks(
+        np.arange(-1, 5.1, 0.5),
+        reversed(
+            [
+                float("{:.1f}".format(x))
+                for x in list(np.arange(5.0, 1.9, -0.5))
+                + list(np.arange(-2.5, -5.1, -0.5))
+            ]
+        ),
+    )
     plt.grid(linestyle="--")
     plt.legend()
     plt.show()
 
 
-def run_with_different_homophily(system_parameters: Dict, restart: int, time_per_restart: int, algorithm_names: Set):
+def run_with_different_homophily(
+    system_parameters: Dict, restart: int, time_per_restart: int, algorithm_names: Set
+):
     print("Homophily thresholds: ")
     print(homophily_thresholds)
     results_by_homophily = {}
     for homophily in homophily_thresholds:
         system_parameters["homophily_threshold"] = homophily
         print("Current homophily threshold: " + str(homophily))
-        all_results = run_system(system_parameters, restart, time_per_restart, algorithm_names, ANOVA_test=False)
+        all_results = run_system(
+            system_parameters,
+            restart,
+            time_per_restart,
+            algorithm_names,
+            ANOVA_test=False,
+        )
         results_by_homophily[homophily] = all_results
     with open("Quality results of different homophily thresholds.pkl", "wb") as f:
         pickle.dump(results_by_homophily, f, pickle.HIGHEST_PROTOCOL)
 
 
 def load_results_with_different_homophily(result_type: str, algorithm_names: Set):
-    with open("Quality results of different homophily thresholds.pkl",
-              "rb") as f:
+    with open("Quality results of different homophily thresholds.pkl", "rb") as f:
         results_by_homophily = pickle.load(f)
     for homophily in homophily_thresholds:
         results_by_homophily[homophily] = [
-            np.mean(results_by_homophily[homophily]["c_sot"][result_type]) / system_parameters["_round"],
-            np.mean(results_by_homophily[homophily]["r_sort"][result_type]) / system_parameters["_round"]]
+            np.mean(results_by_homophily[homophily]["c_sot"][result_type])
+            / system_parameters["_round"],
+            np.mean(results_by_homophily[homophily]["r_sort"][result_type])
+            / system_parameters["_round"],
+        ]
 
     c_sot_results = [result[0] for result in results_by_homophily.values()]
     r_sort_results = [result[1] for result in results_by_homophily.values()]
 
-
-    plt.plot(results_by_homophily.keys(), c_sot_results, label="C-SOT",
-             color=plt_parameters["color"]["c_sot"], marker=plt_parameters["marker"]["c_sot"])
-    plt.plot(results_by_homophily.keys(), r_sort_results, label="R-SOT",
-             color=plt_parameters["color"]["r_sort"], marker=plt_parameters["marker"]["r_sort"],
-             linestyle=plt_parameters["linestyle"]["r_sort"])
+    plt.plot(
+        results_by_homophily.keys(),
+        c_sot_results,
+        label="C-SOT",
+        color=plt_parameters["color"]["c_sot"],
+        marker=plt_parameters["marker"]["c_sot"],
+    )
+    plt.plot(
+        results_by_homophily.keys(),
+        r_sort_results,
+        label="R-SOT",
+        color=plt_parameters["color"]["r_sort"],
+        marker=plt_parameters["marker"]["r_sort"],
+        linestyle=plt_parameters["linestyle"]["r_sort"],
+    )
     plt.xlabel("Homophily threshold")
     plt.ylabel(result_type + " quality")
     plt.grid(linestyle="--")
@@ -393,14 +507,22 @@ def load_results_with_different_homophily(result_type: str, algorithm_names: Set
     plt.show()
 
 
-def run_with_different_population(system_parameters: Dict, restart: int, time_per_restart: int, algorithm_names: Set):
+def run_with_different_population(
+    system_parameters: Dict, restart: int, time_per_restart: int, algorithm_names: Set
+):
     print("Population sizes: ")
     print(population_sizes)
     results_by_size = {}
     for population in population_sizes:
         system_parameters["x"] = population
         print("Current population size: " + str(population))
-        all_results = run_system(system_parameters, restart, time_per_restart, algorithm_names, ANOVA_test=False)
+        all_results = run_system(
+            system_parameters,
+            restart,
+            time_per_restart,
+            algorithm_names,
+            ANOVA_test=False,
+        )
         results_by_size[population] = all_results
     with open("Quality results of different population sizes.pkl", "wb") as f:
         pickle.dump(results_by_size, f, pickle.HIGHEST_PROTOCOL)
@@ -411,16 +533,29 @@ def load_results_with_different_population(result_type: str, algorithm_names: Se
         results_by_size = pickle.load(f)
     for population in population_sizes:
         results_by_size[population] = [
-            np.mean(results_by_size[population]["c_sot"][result_type]) / system_parameters["_round"],
-            np.mean(results_by_size[population]["r_sort"][result_type]) / system_parameters["_round"]]
+            np.mean(results_by_size[population]["c_sot"][result_type])
+            / system_parameters["_round"],
+            np.mean(results_by_size[population]["r_sort"][result_type])
+            / system_parameters["_round"],
+        ]
     c_sot_results = [result[0] for result in results_by_size.values()]
     r_sort_results = [result[1] for result in results_by_size.values()]
 
-    plt.plot(population_sizes, c_sot_results, label="C-SOT",
-             color=plt_parameters["color"]["c_sot"], marker=plt_parameters["marker"]["c_sot"])
-    plt.plot(population_sizes, r_sort_results, label="R-SOT",
-             color=plt_parameters["color"]["r_sort"], marker=plt_parameters["marker"]["r_sort"],
-             linestyle=plt_parameters["linestyle"]["r_sort"])
+    plt.plot(
+        population_sizes,
+        c_sot_results,
+        label="C-SOT",
+        color=plt_parameters["color"]["c_sot"],
+        marker=plt_parameters["marker"]["c_sot"],
+    )
+    plt.plot(
+        population_sizes,
+        r_sort_results,
+        label="R-SOT",
+        color=plt_parameters["color"]["r_sort"],
+        marker=plt_parameters["marker"]["r_sort"],
+        linestyle=plt_parameters["linestyle"]["r_sort"],
+    )
     plt.xlabel("Population size")
     plt.ylabel(result_type + " quality")
     plt.grid(linestyle="--")
@@ -429,8 +564,12 @@ def load_results_with_different_population(result_type: str, algorithm_names: Se
 
 
 # Research question 2: compare the hybrid approach with top-down and bottom-up approaches.
-def run_rq_2(system_parameters: Dict, restart: int, time_per_restart: int, algorithm_names: Set):
-    all_results = run_system(system_parameters, restart, time_per_restart, algorithm_names, ANOVA_test=False)
+def run_rq_2(
+    system_parameters: Dict, restart: int, time_per_restart: int, algorithm_names: Set
+):
+    all_results = run_system(
+        system_parameters, restart, time_per_restart, algorithm_names, ANOVA_test=False
+    )
     print(all_results)
     with open("RQ1_results.pkl", "wb") as f:
         pickle.dump(all_results, f, pickle.HIGHEST_PROTOCOL)
@@ -442,10 +581,18 @@ def load_results_rq_2(algorithm_names: Set):
         all_results = pickle.load(f)
     boxplot_data = {"Best": {}, "Average": {}, "Worst": {}}
     for key in boxplot_data.keys():
-        boxplot_data[key]["Hive"] = [val / system_parameters["_round"] for val in all_results["hive"][key]]
-        boxplot_data[key]["C-SOT"] = [val / system_parameters["_round"] for val in all_results["c_sot"][key]]
-        boxplot_data[key]["R-SOT"] = [val / system_parameters["_round"] for val in all_results["r_sort"][key]]
-        boxplot_data[key]["HiveHybrid"] = [val / system_parameters["_round"] for val in all_results["hybrid_hive"][key]]
+        boxplot_data[key]["Hive"] = [
+            val / system_parameters["_round"] for val in all_results["hive"][key]
+        ]
+        boxplot_data[key]["C-SOT"] = [
+            val / system_parameters["_round"] for val in all_results["c_sot"][key]
+        ]
+        boxplot_data[key]["R-SOT"] = [
+            val / system_parameters["_round"] for val in all_results["r_sort"][key]
+        ]
+        boxplot_data[key]["HiveHybrid"] = [
+            val / system_parameters["_round"] for val in all_results["hybrid_hive"][key]
+        ]
     for key, val in boxplot_data.items():
         draw_graph_rq_2(boxplot_data[key], key)
 
@@ -478,43 +625,72 @@ if __name__ == "__main__":
         "epsilon": 0.000002,
         "homophily_threshold": 2.8,
         "risk": 2,
-        "info_to_console": True
+        "info_to_console": True,
     }
-    restart = 6 # number of rounds to average
-    runtime_per_restart = 30 # number of restarts
+    restart = 6  # number of rounds to average
+    runtime_per_restart = 30  # number of restarts
     with_hive = {"c_sot", "r_sort", "hive"}
     without_hive = {"c_sot", "r_sort"}
 
     # Parameter settings for matplotlib
-    cmfont = font_manager.FontProperties(fname=matplotlib.get_data_path() + '/fonts/ttf/cmr10.ttf')
-    font = {'family': 'serif',
-            'serif': cmfont.get_name(),
-            'size': 22}
-    matplotlib.rc('font', **font)
-    matplotlib.rcParams['mathtext.fontset'] = 'cm'
-    matplotlib.rcParams['axes.unicode_minus'] = False
+    cmfont = font_manager.FontProperties(
+        fname=matplotlib.get_data_path() + "/fonts/ttf/cmr10.ttf"
+    )
+    font = {"family": "serif", "serif": cmfont.get_name(), "size": 22}
+    matplotlib.rc("font", **font)
+    matplotlib.rcParams["mathtext.fontset"] = "cm"
+    matplotlib.rcParams["axes.unicode_minus"] = False
 
     # Beta distribution graph
     get_beta_distribution_graph()
 
     # Run RQ1.1 - risk level
-    run_with_different_risk_level(system_parameters, restart, runtime_per_restart, algorithm_names=without_hive)
-    load_results_with_different_risk_level(result_type="Best", algorithm_names=without_hive)
-    load_results_with_different_risk_level(result_type="Average", algorithm_names=without_hive)
-    load_results_with_different_risk_level(result_type="Worst", algorithm_names=without_hive)
+    run_with_different_risk_level(
+        system_parameters, restart, runtime_per_restart, algorithm_names=without_hive
+    )
+    load_results_with_different_risk_level(
+        result_type="Best", algorithm_names=without_hive
+    )
+    load_results_with_different_risk_level(
+        result_type="Average", algorithm_names=without_hive
+    )
+    load_results_with_different_risk_level(
+        result_type="Worst", algorithm_names=without_hive
+    )
 
     # Run RQ1.2 - population size
-    run_with_different_population(system_parameters, restart, runtime_per_restart, algorithm_names=without_hive)
-    load_results_with_different_population(result_type="Best", algorithm_names=without_hive)
-    load_results_with_different_population(result_type="Average", algorithm_names=without_hive)
-    load_results_with_different_population(result_type="Worst", algorithm_names=without_hive)
+    run_with_different_population(
+        system_parameters, restart, runtime_per_restart, algorithm_names=without_hive
+    )
+    load_results_with_different_population(
+        result_type="Best", algorithm_names=without_hive
+    )
+    load_results_with_different_population(
+        result_type="Average", algorithm_names=without_hive
+    )
+    load_results_with_different_population(
+        result_type="Worst", algorithm_names=without_hive
+    )
 
     # Run RQ1.2 - homophily threshold
-    run_with_different_homophily(system_parameters, restart, runtime_per_restart, algorithm_names=without_hive)
-    load_results_with_different_homophily(result_type="Best", algorithm_names=without_hive)
-    load_results_with_different_homophily(result_type="Average", algorithm_names=without_hive)
-    load_results_with_different_homophily(result_type="Worst", algorithm_names=without_hive)
+    run_with_different_homophily(
+        system_parameters, restart, runtime_per_restart, algorithm_names=without_hive
+    )
+    load_results_with_different_homophily(
+        result_type="Best", algorithm_names=without_hive
+    )
+    load_results_with_different_homophily(
+        result_type="Average", algorithm_names=without_hive
+    )
+    load_results_with_different_homophily(
+        result_type="Worst", algorithm_names=without_hive
+    )
 
     # Run RQ1 - comprehensive comparison
-    run_rq_2(system_parameters, restart, runtime_per_restart, {"c_sot", "r_sort", "hive", "hybrid_hive"})
+    run_rq_2(
+        system_parameters,
+        restart,
+        runtime_per_restart,
+        {"c_sot", "r_sort", "hive", "hybrid_hive"},
+    )
     load_results_rq_2({"c_sot", "r_sort", "hive", "hybrid_hive"})
