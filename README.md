@@ -90,8 +90,24 @@ If you do not have it on your local machine, follow the links provided below:
 
 <!-- USAGE EXAMPLES -->
 ## Usage
-## Parameters
+Simulation system to run different team formation algorithm under different scenario.
 
+### Parameters
+system_parameters = {
+        "x": 20,
+        "_round": 10,
+        "k": 8.0,
+        "lam": 0.8,
+        "alpha": 0.5,
+        "epsilon": 0.000002,
+        "homophily_threshold": 2.8,
+        "risk": 2,
+        "info_to_console": True
+    }
+    restart = 3
+    runtime_per_restart = 6
+    with_hive = {"sot_1", "sot_2", "hive"}
+    without_hive = {"sot_1", "sot_2"}
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
