@@ -151,18 +151,17 @@ Simulation system to run different team formation algorithm under different scen
       ```
 7. Team: contains the class Team:
     ```
-  class Team:
-  The team class is used to represent each team during the hackathon.
-  Class attributes:
-        team_members: A list of workers in this team.
+    class Team:
+    The team class is used to represent each team during the hackathon.
+    Class attributes:
+          team_members: A list of workers in this team.
   
     ```
 9. Worker: contains the class Worker and Attribute:
   ```
   class Worker:
   The worker model
-
-    attributes: all attributes needed to model an agent
+    Class attributes:
     example: {rating, nationality, background, expertise, age, etc.}
 
     preference dict: (DEPRECATED) a dict containing the agent's preference of each attribute
@@ -173,14 +172,14 @@ Simulation system to run different team formation algorithm under different scen
    ```
    class Attribute:
    All attributes in an worker:
-   knowledge domain
-   nationality
-   education
-   age
-   personality
-   risk appetite
-   diversity preference
-   expertise
+     knowledge_domain
+     nationality
+     education
+     age
+     personality
+     risk_appetite
+     diversity_preference
+     expertise
    ```
 
 ### Parameters
