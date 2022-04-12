@@ -124,20 +124,19 @@ Simulation system to run different team formation algorithm under different scen
     ```
     
 2. Hackathon: contains the Class Hackathon:
-  ```
-  class Hackathon:
-  The hackathon that workers have to finish
-
-    workers: Workers that have registered this hackathon or are working on this hackathon.
-    worker_number: Number of workers in this hackathon.
-    id: (DEPRECATED) Id of this hackathon.
-    time: (DEPRECATED) Time that this hackathon takes.
-  ```
+    ```
+    class Hackathon:
+    The hackathon that workers have to finish
+    Class attribute:
+      workers: Workers that have registered this hackathon or are working on this hackathon.
+      worker_number: Number of workers in this hackathon.
+      id: (DEPRECATED) Id of this hackathon.
+      time: (DEPRECATED) Time that this hackathon takes.
+    ```
 5. SimulationSystem: the main module. It contains Class SimulationSystem:
     ```
     class SimulationSystem:
     Simulation system to run different team formation algorithm under different scenario.
-
     Class attributes:
          round: The total number of rounds that this system has to run for.
          current_round: The number of current round.
@@ -150,37 +149,37 @@ Simulation system to run different team formation algorithm under different scen
          algorithm: The algorithm used to form team.
       ```
 7. Team: contains the class Team:
-    ```
-    class Team:
-    The team class is used to represent each team during the hackathon.
-    Class attributes:
-          team_members: A list of workers in this team.
-  
-    ```
+      ```
+      class Team:
+      The team class is used to represent each team during the hackathon.
+      Class attributes:
+            team_members: A list of workers in this team.
+
+      ```
 9. Worker: contains the class Worker and Attribute:
-  ```
-  class Worker:
-  The worker model
-    Class attributes:
-    example: {rating, nationality, background, expertise, age, etc.}
+      ```
+      class Worker:
+      The worker model
+       Class attributes:
+        example: {rating, nationality, background, expertise, age, etc.}
 
-    preference dict: (DEPRECATED) a dict containing the agent's preference of each attribute
-    example: {rating: [100%, 80%, 50%], nationality: [USA, China]}
+        preference dict: (DEPRECATED) a dict containing the agent's preference of each attribute
+        example: {rating: [100%, 80%, 50%], nationality: [USA, China]}
 
-    collaboration_history: a dict containing the history of all the workers it has worked with by their id
-   ```
-   ```
-   class Attribute:
-   All attributes in an worker:
-     knowledge_domain
-     nationality
-     education
-     age
-     personality
-     risk_appetite
-     diversity_preference
-     expertise
-   ```
+        collaboration_history: a dict containing the history of all the workers it has worked with by their id
+       ```
+       ```
+       class Attribute:
+       All attributes in an worker:
+         knowledge_domain
+         nationality
+         education
+         age
+         personality
+         risk_appetite
+         diversity_preference
+         expertise
+       ```
 
 ### Parameters
 ```
