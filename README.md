@@ -112,6 +112,17 @@ Simulation system to run different team formation algorithm under different scen
         homophily_threshold: The threshold to determine if a worker want to join a team or form a team with others.
         variation: Benchmark variation number. 1 for teams choose first, and 2 for workers choose first.
     ```
+    ```
+    class HybridHive(Algorithm):
+    HybridHive network rotation algorithm.
+    Class attributes:
+        k: k value used in the logistic function.
+        lam: Dampening factor to decrease tie strength.
+        alpha: Weight used in objective function to trade off network efficiency and tie strength.
+        epsilon: Probability used to stop stochastic search for network rotation.
+        graph: Tie strength betweent every two nodes. weight = graph[id_1][id_2].
+    ```
+    
 3. Hackathon:
 4. SimulationSystem:
 5. Team:
