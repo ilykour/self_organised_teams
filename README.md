@@ -69,20 +69,23 @@ This is an example of how to list things you need to use the software and how to
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+_Below is an example of how you can install and set up the simulator on your local machine. This program doesn't rely on any external dependencies or services._
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone git@github.com:ilykour/self_organised_teams.git
    ```
-3. Install NPM packages
+2. Check that you have an up-to-date python 
    ```sh
-   npm install
+   python --version
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+3. Activate the virtual environment (Git bash)
+   ```sh
+   source venv/bin/activate
+   ```
+6. Run the simulator
+   ```sh
+   python SimulationSystem.py
    ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
