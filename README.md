@@ -96,10 +96,10 @@ Simulation system to run different team formation algorithm under different scen
 <span style="color:blue">*Algorithm*: contains the Classes for the Algorithms:</span>
     
 ```
-    class **HIVEAlgorithm**(Algorithm):
+    class HIVEAlgorithm (Algorithm):
     Hive network rotation algorithm.
     Class attributes:
-        k: k value used in the logistic function.
+        *k*: k value used in the logistic function.
         lam: Dampening factor to decrease tie strength.
         alpha: Weight used in objective function to trade off network efficiency and tie strength.
         epsilon: Probability used to stop stochastic search for network rotation.
@@ -123,8 +123,7 @@ Simulation system to run different team formation algorithm under different scen
         graph: Tie strength betweent every two nodes. weight = graph[id_1][id_2].
 ```
 <span style="color:blue">*Hackathon*: contains the Class Hackathon:</span>
-
-    ```
+```
     class Hackathon:
     The hackathon that workers have to finish
     Class attribute:
@@ -132,9 +131,9 @@ Simulation system to run different team formation algorithm under different scen
       worker_number: Number of workers in this hackathon.
       id: (DEPRECATED) Id of this hackathon.
       time: (DEPRECATED) Time that this hackathon takes.
-    ```
-3. SimulationSystem: the main module. It contains Class SimulationSystem:
-    ```
+```
+<span style="color:blue">*SimulationSystem*: the main module. It contains Class SimulationSystem:</span>
+```
     class SimulationSystem:
     Simulation system to run different team formation algorithm under different scenario.
     Class attributes:
@@ -147,16 +146,16 @@ Simulation system to run different team formation algorithm under different scen
          avg_quality_history: The average quality of each team in each round.
          worst_quality_historyL The worst quality of each team in each round.
          algorithm: The algorithm used to form team.
-      ```
-4. Team: contains the class Team:
-      ```
+```
+<span style="color:blue">*Team*: contains the class Team:</span>
+```
       class Team:
       The team class is used to represent each team during the hackathon.
       Class attributes:
             team_members: A list of workers in this team.
-      ```
-5. Worker: contains the class Worker and Attribute:
-      ```
+```
+<span style="color:blue">*Worker*: contains the class Worker and Attribute:</span>
+```
       class Worker:
       The worker model
        Class attributes:
@@ -164,9 +163,9 @@ Simulation system to run different team formation algorithm under different scen
         preference dict: (DEPRECATED) a dict containing the agent's preference of each attribute
         example: {rating: [100%, 80%, 50%], nationality: [USA, China]}
         collaboration_history: a dict containing the history of all the workers it has worked with by their id
-      ```
+```
        
-      ```
+```
        class Attribute:
        All attributes in an worker:
          knowledge_domain
@@ -177,10 +176,10 @@ Simulation system to run different team formation algorithm under different scen
          risk_appetite
          diversity_preference
          expertise
-      ```
+```
 
 ### Simulation Parameters
-        ```
+```
         system_parameters = {
                 "x": 20,
                 "_round": 10,
@@ -194,7 +193,7 @@ Simulation system to run different team formation algorithm under different scen
             }
             restart = 3
             runtime_per_restart = 6
-        ```
+```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
