@@ -133,7 +133,7 @@ Simulation system to run different team formation algorithm under different scen
       id: (DEPRECATED) Id of this hackathon.
       time: (DEPRECATED) Time that this hackathon takes.
     ```
-5. SimulationSystem: the main module. It contains Class SimulationSystem:
+3. SimulationSystem: the main module. It contains Class SimulationSystem:
     ```
     class SimulationSystem:
     Simulation system to run different team formation algorithm under different scenario.
@@ -148,14 +148,14 @@ Simulation system to run different team formation algorithm under different scen
          worst_quality_historyL The worst quality of each team in each round.
          algorithm: The algorithm used to form team.
       ```
-7. Team: contains the class Team:
+4. Team: contains the class Team:
       ```
       class Team:
       The team class is used to represent each team during the hackathon.
       Class attributes:
             team_members: A list of workers in this team.
       ```
-9. Worker: contains the class Worker and Attribute:
+5. Worker: contains the class Worker and Attribute:
       ```
       class Worker:
       The worker model
@@ -164,9 +164,9 @@ Simulation system to run different team formation algorithm under different scen
         preference dict: (DEPRECATED) a dict containing the agent's preference of each attribute
         example: {rating: [100%, 80%, 50%], nationality: [USA, China]}
         collaboration_history: a dict containing the history of all the workers it has worked with by their id
-       ```
+      ```
        
-       ```
+      ```
        class Attribute:
        All attributes in an worker:
          knowledge_domain
