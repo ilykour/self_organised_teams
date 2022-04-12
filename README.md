@@ -154,7 +154,6 @@ Simulation system to run different team formation algorithm under different scen
       The team class is used to represent each team during the hackathon.
       Class attributes:
             team_members: A list of workers in this team.
-
       ```
 9. Worker: contains the class Worker and Attribute:
       ```
@@ -168,6 +167,7 @@ Simulation system to run different team formation algorithm under different scen
 
         collaboration_history: a dict containing the history of all the workers it has worked with by their id
        ```
+       
        ```
        class Attribute:
        All attributes in an worker:
@@ -181,22 +181,22 @@ Simulation system to run different team formation algorithm under different scen
          expertise
        ```
 
-### Parameters
-```
-system_parameters = {
-        "x": 20,
-        "_round": 10,
-        "k": 8.0,
-        "lam": 0.8,
-        "alpha": 0.5,
-        "epsilon": 0.000002,
-        "homophily_threshold": 2.8,
-        "risk": 2,
-        "info_to_console": True
-    }
-    restart = 3
-    runtime_per_restart = 6
-```
+### Simulation Parameters
+        ```
+        system_parameters = {
+                "x": 20,
+                "_round": 10,
+                "k": 8.0,
+                "lam": 0.8,
+                "alpha": 0.5,
+                "epsilon": 0.000002,
+                "homophily_threshold": 2.8,
+                "risk": 2,
+                "info_to_console": True
+            }
+            restart = 3
+            runtime_per_restart = 6
+        ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
