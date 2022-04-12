@@ -60,9 +60,11 @@ To get a local copy up and running follow these simple example steps.
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* npm
+* python > 3.7.0
   ```sh
-  npm install npm@latest -g
+  Mac:https://www.python.org/downloads/macos/
+  Windows: https://www.python.org/downloads/windows/
+  Linux: sudo apt-get install python3.7.0
   ```
 
 ### Installation
