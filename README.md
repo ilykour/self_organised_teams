@@ -93,6 +93,7 @@ If you do not have it on your local machine, follow the links provided below:
 Simulation system to run different team formation algorithm under different scenario.
 
 ### Parameters
+```
 system_parameters = {
         "x": 20,
         "_round": 10,
@@ -108,6 +109,7 @@ system_parameters = {
     runtime_per_restart = 6
     with_hive = {"sot_1", "sot_2", "hive"}
     without_hive = {"sot_1", "sot_2"}
+```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
