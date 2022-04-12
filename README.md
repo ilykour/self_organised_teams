@@ -67,16 +67,17 @@ If you do not have it on your local machine, follow the links provided below:
 
 1. Clone the repo
    ```sh
-   git clone git@github.com:ilykour/self_organised_teams.git
+   git clone https://github.com/ilykour/self_organised_teams.git
    ```
 2. Move to the directory
    ```sh
    cd self_organised_teams
    ```
-3. Check that you have an up-to-date python 
+3. Check that you have an up-to-date python version
    ```sh
    python --version
    ```
+   if not, download the latest one.
 4. Activate the virtual environment (Git bash)
    ```sh
    source venv/bin/activate
@@ -85,6 +86,7 @@ If you do not have it on your local machine, follow the links provided below:
    ```sh
    python SimulationSystem.py
    ```
+6. To exit the simulator press Crt+C
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
