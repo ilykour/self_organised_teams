@@ -55,6 +55,8 @@ Our study highlights the importance of integrating worker agency in algorithm-me
 ## Getting Started
 
 ### Prerequisites
+This simulator requires python >= 3.7.0. 
+If you do not have it on your local machine, follow the links provided below:
   ```sh
   Mac:https://www.python.org/downloads/macos/
   Windows: https://www.python.org/downloads/windows/
@@ -67,15 +69,19 @@ Our study highlights the importance of integrating worker agency in algorithm-me
    ```sh
    git clone git@github.com:ilykour/self_organised_teams.git
    ```
-2. Check that you have an up-to-date python 
+2. Move to the directory
+   ```sh
+   cd self_organised_teams
+   ```
+3. Check that you have an up-to-date python 
    ```sh
    python --version
    ```
-3. Activate the virtual environment (Git bash)
+4. Activate the virtual environment (Git bash)
    ```sh
    source venv/bin/activate
    ```
-6. Run the simulator
+5. Run the simulator
    ```sh
    python SimulationSystem.py
    ```
