@@ -93,7 +93,7 @@ If you do not have it on your local machine, follow the links provided below:
 Simulation system to run different team formation algorithm under different scenario.
 
 ### Modules
-1. Algorithm: contains the Classes for the Models (algorithms):
+<span style="color:blue">*Algorithm*: contains the Classes for the Algorithms:</span>
     
     ```
     class **HIVEAlgorithm**(Algorithm):
