@@ -161,10 +161,8 @@ Simulation system to run different team formation algorithm under different scen
       The worker model
        Class attributes:
         example: {rating, nationality, background, expertise, age, etc.}
-
         preference dict: (DEPRECATED) a dict containing the agent's preference of each attribute
         example: {rating: [100%, 80%, 50%], nationality: [USA, China]}
-
         collaboration_history: a dict containing the history of all the workers it has worked with by their id
        ```
        
