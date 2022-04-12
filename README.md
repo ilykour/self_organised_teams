@@ -95,7 +95,7 @@ Simulation system to run different team formation algorithm under different scen
 ### Modules
 <span style="color:blue">*Algorithm*: contains the Classes for the Algorithms:</span>
     
-    ```
+```
     class **HIVEAlgorithm**(Algorithm):
     Hive network rotation algorithm.
     Class attributes:
@@ -104,15 +104,15 @@ Simulation system to run different team formation algorithm under different scen
         alpha: Weight used in objective function to trade off network efficiency and tie strength.
         epsilon: Probability used to stop stochastic search for network rotation.
         graph: Tie strength between every two nodes. weight = graph[id_1][id_2].
-    ```
-    ```
+```
+```
     class SOTAlgorithm(Algorithm):
     Self-Organizing Teams algorithm.
     Class attributes:
         homophily_threshold: The threshold to determine if a worker want to join a team or form a team with others.
         variation: Benchmark variation number. 1 for teams choose first, and 2 for workers choose first.
-    ```
-    ```
+```
+```
     class HybridHive(Algorithm):
     HybridHive network rotation algorithm.
     Class attributes:
@@ -121,9 +121,9 @@ Simulation system to run different team formation algorithm under different scen
         alpha: Weight used in objective function to trade off network efficiency and tie strength.
         epsilon: Probability used to stop stochastic search for network rotation.
         graph: Tie strength betweent every two nodes. weight = graph[id_1][id_2].
-    ```
-    
-2. Hackathon: contains the Class Hackathon:
+```
+<span style="color:blue">*Hackathon*: contains the Class Hackathon:</span>
+
     ```
     class Hackathon:
     The hackathon that workers have to finish
