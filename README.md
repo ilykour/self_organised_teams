@@ -99,7 +99,7 @@ Simulation system to run different team formation algorithm under different scen
     class HIVEAlgorithm (Algorithm):
     Hive network rotation algorithm.
     Class attributes:
-        *k*: k value used in the logistic function.
+        k: k value used in the logistic function.
         lam: Dampening factor to decrease tie strength.
         alpha: Weight used in objective function to trade off network efficiency and tie strength.
         epsilon: Probability used to stop stochastic search for network rotation.
